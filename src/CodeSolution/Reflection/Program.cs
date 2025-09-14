@@ -50,19 +50,20 @@ class Pogram
         //var displayMethod = type.GetMethod("displayInfo");
         //displayMethod.Invoke(person, null);
 
-        Type type = typeof(Person4);
+        Type type = typeof(Person5);
 
-        Object person = Activator.CreateInstance(type);
-        type.GetMethod("SetInfo")?.Invoke(person,new object[] {"Alice",20 });
+        ConstructorInfo? constructorInfo = type.GetConstructor(new Type[] { typeof(string), typeof(int)});
+        object person = constructorInfo.Invoke(new Object[] {"Alice",20});
 
-        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
-
-        foreach(var method in methods )
+        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        foreach (var method in methods)
         {
             if(method.GetParameters().Length == 0)
             {
-                method.Invoke(person, null);
+               method.Invoke(person, null);
             }
         }
+  
+       
     }
 }
