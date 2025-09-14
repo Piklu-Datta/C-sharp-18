@@ -1,6 +1,7 @@
 ﻿
 
 using Reflection;
+using System.Reflection;
 
 class Pogram
 {
@@ -26,14 +27,42 @@ class Pogram
         //    Console.WriteLine(method.Name);
         //}
 
-        Type type = typeof(Person2);
 
-        object obj = Activator.CreateInstance(type,"Alice",100);
+        //Type type = typeof(Person2);
 
-        var name = type.GetProperty("Name").GetValue(obj);
+        //object obj = Activator.CreateInstance(type,"Alice",100);
 
-        var age = type.GetProperty("Id").GetValue(obj);
+        //var name = type.GetProperty("Name").GetValue(obj);
 
-        Console.WriteLine($"Name: {name} Age: {age}");
+        //var age = type.GetProperty("Id").GetValue(obj);
+
+        //Console.WriteLine($"Name: {name} Age: {age}");
+
+
+        //Type type = typeof(Person3);
+
+        //object person = Activator.CreateInstance(type);
+
+        //var setInfoMethod = type.GetMethod("setInfo");
+
+        //setInfoMethod.Invoke(person, new object[] {"Alice", 25 });
+
+        //var displayMethod = type.GetMethod("displayInfo");
+        //displayMethod.Invoke(person, null);
+
+        Type type = typeof(Person4);
+
+        Object person = Activator.CreateInstance(type);
+        type.GetMethod("SetInfo")?.Invoke(person,new object[] {"Alice",20 });
+
+        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+        foreach(var method in methods )
+        {
+            if(method.GetParameters().Length == 0)
+            {
+                method.Invoke(person, null);
+            }
+        }
     }
 }
