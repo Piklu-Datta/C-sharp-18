@@ -50,17 +50,46 @@ class Pogram
         //var displayMethod = type.GetMethod("displayInfo");
         //displayMethod.Invoke(person, null);
 
-        Type type = typeof(Person5);
 
-        ConstructorInfo? constructorInfo = type.GetConstructor(new Type[] { typeof(string), typeof(int)});
-        object person = constructorInfo.Invoke(new Object[] {"Alice",20});
 
-        var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-        foreach (var method in methods)
+        //Type type = typeof(Person5);
+
+        //ConstructorInfo? constructorInfo = type.GetConstructor(new Type[] { typeof(string), typeof(int)});
+        //object person = constructorInfo.Invoke(new Object[] {"Alice",20});
+
+        //var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+        //foreach (var method in methods)
+        //{
+        //    if(method.GetParameters().Length == 0)
+        //    {
+        //       method.Invoke(person, null);
+        //    }
+        //}
+
+
+        Assembly assembly = Assembly.GetExecutingAssembly();
+
+        var types = assembly.GetTypes();
+        foreach (var t in types)
         {
-            if(method.GetParameters().Length == 0)
+            var interfaces = t.GetInterfaces();
+
+            if (interfaces.Any(x => x.Name == "IPurchaseable"))
             {
-               method.Invoke(person, null);
+                ConstructorInfo? constructor = t.GetConstructor(new Type[] { typeof(string), typeof(double), typeof(double) });
+
+                object? o = constructor?.Invoke(new object[] {"Camera", 3000, 10 });
+
+                MethodInfo? method1 = t.GetMethod("CalculatePriceAfterTax", BindingFlags.Public | BindingFlags.Instance);
+                MethodInfo? method2 = t.GetMethod("calculateDiscount", BindingFlags.Public | BindingFlags.Instance, null, new Type[] { typeof(double) }, null );
+
+                double? r1 = (double?)method1?.Invoke(o, null);
+                double? r2 = (double?)method2?.Invoke(o, new object[] {5});
+
+                Console.WriteLine(r1);
+                Console.WriteLine(r2);
+
+
             }
         }
   
